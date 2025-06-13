@@ -11,6 +11,27 @@ Class {
 	#package : 'Composant'
 }
 
+{ #category : 'as yet unclassified' }
+Cicruit class >> nom: unNom composants: uneCollectionDeComposants [
+    | nouveauCircuit |
+    nouveauCircuit := self new.
+    nouveauCircuit nom: unNom.
+    nouveauCircuit ajouterComposants: uneCollectionDeComposants.
+    ^ nouveauCircuit
+]
+
+{ #category : 'as yet unclassified' }
+Cicruit >> ajouterComposants: uneCollectionDeComposants [
+    composants addAll: uneCollectionDeComposants.
+    composants := composants sorted: [:a :b | a id < b id].
+
+    interrupteurs := (composants select: [:comp | comp description beginsWith: 'Interrupteur']) 
+        sorted: [:a :b | a id < b id].
+
+    sorties := (composants select: [:comp | comp description beginsWith: 'Vanne']) 
+        sorted: [:a :b | a id < b id]
+]
+
 { #category : 'accessing' }
 Cicruit >> composants [
 
@@ -21,6 +42,15 @@ Cicruit >> composants [
 Cicruit >> composants: anObject [
 
 	composants := anObject
+]
+
+{ #category : 'accessing' }
+Cicruit >> description [
+    ^ 'Circuit {1}: {2} composants ({3} interrupteurs, {4} sorties)' format: {
+        nom.
+        self nombreComposants.
+        self nombreInterrupteurs.
+        self nombreSorties}
 ]
 
 { #category : 'initialization' }
@@ -53,6 +83,23 @@ Cicruit >> nom [
 Cicruit >> nom: anObject [
 
 	nom := anObject
+]
+
+{ #category : 'as yet unclassified' }
+Cicruit >> nombreComposants [
+    ^ composants size
+
+]
+
+{ #category : 'as yet unclassified' }
+Cicruit >> nombreInterrupteurs [
+    ^ interrupteurs size
+]
+
+{ #category : 'as yet unclassified' }
+Cicruit >> nombreSorties [
+    ^ sorties size
+
 ]
 
 { #category : 'accessing' }

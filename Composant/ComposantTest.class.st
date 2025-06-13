@@ -5,6 +5,38 @@ Class {
 	#package : 'Composant'
 }
 
+{ #category : 'part3' }
+ComposantTest >> testCircuitAvecComposants [
+    | circuit composants i1 i2 vanne and |
+    i1 := Interrupteur new.
+    i2 := Interrupteur new.
+    and := And new.
+    vanne := Vanne new.
+    
+    and in1: i1; in2: i2.
+    vanne in: and.
+    
+    composants := {i1. i2. and. vanne}.
+    circuit := Cicruit nom: 'b' composants: composants.
+    
+    self assert: circuit nom equals: 'b'.
+    self assert: circuit nombreComposants equals: 4.
+    self assert: circuit nombreInterrupteurs equals: 2.
+    self assert: circuit nombreSorties equals: 1
+
+]
+
+{ #category : 'part3' }
+ComposantTest >> testCreationCircuitVide [
+    | circuit |
+    circuit := Cicruit new.
+    circuit nom: 'a'.
+    self assert: circuit nom equals: 'a'.
+    self assert: circuit nombreComposants equals: 0.
+    self assert: circuit nombreInterrupteurs equals: 0.
+    self assert: circuit nombreSorties equals: 0
+]
+
 { #category : 'part2' }
 ComposantTest >> testDuEtLogique [
     | i1 i2 et |
@@ -21,6 +53,36 @@ ComposantTest >> testDuEtLogique [
     
     i1 on. i2 on.
     self assert: et etat equals: true
+]
+
+{ #category : 'part3' }
+ComposantTest >> testEnnoncé [
+    | circuit i1 i2 isecu or not and vanne composants |
+    i1 := Interrupteur new.
+    i2 := Interrupteur new.
+    isecu := Interrupteur new.
+    or := Or new.
+    not := Not new.
+    and := And new.
+    vanne := Vanne new.
+    
+    or in1: i1; in2: i2.
+    not in: isecu.
+    and in1: or; in2: not.
+    vanne in: and.
+    
+    composants := {i1. i2. isecu. or. not. and. vanne}.
+    circuit := Cicruit nom: 'ennocné' composants: composants.
+    
+    self assert: circuit nombreComposants equals: 7.
+    self assert: circuit nombreInterrupteurs equals: 3.
+    self assert: circuit nombreSorties equals: 1.
+    
+    circuit interrupteurs do: [:inter | 
+        self assert: (inter  description beginsWith: 'Interrupteur' )].
+    
+    circuit sorties do: [:sortie | 
+        self assert: (sortie  description beginsWith: 'Vanne')]
 ]
 
 { #category : 'part1' }
@@ -87,4 +149,19 @@ ComposantTest >> testNotNonConnecte [
     resultat := porteNO description.
     attendu := 'Not ({1}) in: non connecté' format: {porteNO id}.
     self assert: resultat equals: attendu
+]
+
+{ #category : 'part3' }
+ComposantTest >> testTriComposants [
+    | circuit i1 i2 i3 composants |
+    i1 := Interrupteur new.
+    i2 := Interrupteur new.
+    i3 := Interrupteur new.
+    
+    composants := {i3. i1. i2}.
+    circuit := Cicruit nom: 'Test Tri' composants: composants.
+    
+    self assert: circuit composants first id <= circuit composants second id.
+    self assert: circuit composants second id <= circuit composants third id
+
 ]
