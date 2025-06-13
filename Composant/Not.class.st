@@ -1,0 +1,35 @@
+Class {
+	#name : 'Not',
+	#superclass : 'Porte',
+	#instVars : [
+		'in'
+	],
+	#category : 'Composant',
+	#package : 'Composant'
+}
+
+{ #category : 'accessing' }
+Not >> description [
+    | inDescription |
+    inDescription := in 
+        ifNil: ['non connecté'] 
+        ifNotNil: ['{1} ({2})' format: {in class name. in id}].
+    ^ '{1} ({2}) in: {3}' format: {self class name. self id. inDescription}
+]
+
+{ #category : 'accessing' }
+Not >> etat [
+    ^ [in etat not] on:Error do:[:e | in:=false]
+]
+
+{ #category : 'accessing' }
+Not >> in [
+
+	^ in
+]
+
+{ #category : 'accessing' }
+Not >> in: anObject [
+
+	in := anObject
+]
