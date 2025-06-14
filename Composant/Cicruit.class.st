@@ -21,6 +21,16 @@ Cicruit class >> nom: unNom composants: uneCollectionDeComposants [
 ]
 
 { #category : 'as yet unclassified' }
+Cicruit >> afficherResultats: resultats [
+    Transcript show: nom ; cr.
+    resultats do: [:resultat | 
+        | comp signal valeur |
+        comp := resultat at: 'composant'.
+        signal := resultat at: 'signal'.
+        valeur := resultat at: 'valeur']
+]
+
+{ #category : 'as yet unclassified' }
 Cicruit >> ajouterComposants: uneCollectionDeComposants [
     composants addAll: uneCollectionDeComposants.
     composants := composants sorted: [:a :b | a id < b id].
@@ -51,6 +61,24 @@ Cicruit >> description [
         self nombreComposants.
         self nombreInterrupteurs.
         self nombreSorties}
+]
+
+{ #category : 'public access' }
+Cicruit >> evaluate [
+    | res|
+    res := OrderedCollection new.
+    sorties do: [:out | 
+     | s |
+        s := out evaluate.
+        res add: (Dictionary new 
+            at: 'composant' put: out;
+            at: 'signal' put: s;
+            at: 'valeur' put: s value;
+            yourself)].
+    
+    self afficherResultats: res.
+    ^ res
+
 ]
 
 { #category : 'initialization' }

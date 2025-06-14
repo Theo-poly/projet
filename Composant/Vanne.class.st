@@ -24,16 +24,15 @@ Vanne >> etat [
 		ifNotNil: [in etat]
 ]
 
+{ #category : 'public access' }
+Vanne >> evaluate [
+    ^ [in evaluate] on: Error do: [:error | SignalBas new]
+]
+
 { #category : 'accessing' }
 Vanne >> in [
 
 	^ in
-]
-
-{ #category : 'accessing' }
-Vanne >> in1: anObject [
-
-	in := anObject
 ]
 
 { #category : 'accessing' }

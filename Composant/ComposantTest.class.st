@@ -96,6 +96,17 @@ ComposantTest >> testEtPartiellementConnecte [
     self assert: (resultat includesSubstring: 'in2: non connecté')
 ]
 
+{ #category : 'part4' }
+ComposantTest >> testEvalutateNot [
+    | not s |
+    not := Not new.
+
+    s := not evaluate.
+    self assert: (s isKindOf: SignalHaut).
+    self assert: s value equals: true
+
+]
+
 { #category : 'part1' }
 ComposantTest >> testInterrupteurDescription [
     | interrupteur resultat |

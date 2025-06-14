@@ -20,6 +20,14 @@ Interrupteur >> etat: anObject [
 	etat := anObject
 ]
 
+{ #category : 'public access' }
+Interrupteur >> evaluate [
+    ^ etat 
+        ifTrue: [SignalHaut new] 
+        ifFalse: [SignalBas new]
+
+]
+
 { #category : 'initialization' }
 Interrupteur >> initialize [
     super initialize.

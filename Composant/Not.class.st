@@ -22,6 +22,14 @@ Not >> etat [
     ^ [in etat not] on:Error do:[:e | in:=false]
 ]
 
+{ #category : 'public access' }
+Not >> evaluate [
+    | s1 |
+    s1 := [in evaluate] on: Error do: [:e | SignalBas new].
+    ^ s1 not
+
+]
+
 { #category : 'accessing' }
 Not >> in [
 
