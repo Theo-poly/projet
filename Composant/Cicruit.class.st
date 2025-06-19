@@ -76,14 +76,11 @@ Cicruit >> cicruitComple [
     
     vanne := Vanne new.
     vanne position: 750@250.
-    
-    "=== CONNEXIONS LOGIQUES ==="
     or in1: i1; in2: i2.
     not in: iSec.
     and in1: or; in2: not.
     vanne in: and.
-    
-    "=== CRÉATION DES ÉLÉMENTS GRAPHIQUES ==="
+    i1 off.i2 off. iSec on.
     e1 := i1 image.
     e1 position: i1 position.
     i1 blElement: e1.
@@ -228,12 +225,10 @@ Cicruit >> interrupteurs: anObject [
 
 { #category : 'interface' }
 Cicruit >> ligne: pointA vers: pointB [
-    | ligne longueur |
-    longueur := (pointB x - pointA x) abs.
+    | ligne |
     ligne := BlElement new.
-    ligne size: longueur@3.
-    ligne background: Color black.
-    ligne position: pointA.
+    ligne geometry: (BlLineGeometry from: pointA to: pointB).
+    ligne border: (BlBorder paint: Color black width: 3).
     ^ ligne
 ]
 
@@ -249,8 +244,8 @@ Cicruit >> ligneDeComposant: comp1 versEntree: numeroEntree deComposant: comp2 [
 ]
 
 { #category : 'interface' }
-Cicruit >> mettreAJourCircuit: lesComposants [
-    lesComposants do: [:comp | 
+Cicruit >> mettreAJourCircuit: comps [
+    comps do: [:comp | 
         comp blElement ifNotNil: [
             | nouvelleCouleur |
             nouvelleCouleur := [comp evaluate value 
