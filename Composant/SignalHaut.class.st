@@ -15,7 +15,7 @@ SignalHaut >> not [
     ^ SignalBas new
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'controlling' }
 SignalHaut >> or: x [ 
 	^ self
 ]

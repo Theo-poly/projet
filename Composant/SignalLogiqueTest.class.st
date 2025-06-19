@@ -20,8 +20,11 @@ SignalLogiqueTest >> testSignalBasAnd [
     
     resultat1 := s2 and: s2.
     self assert: resultat1 value equals: false.
+    self assert: (resultat1 isKindOf: SignalBas).
     
 	resultat2 := s1 and: s2 .
+	
+    self assert: (resultat1 isKindOf: SignalBas).
     self assert: resultat2 value equals: false
 ]
 
@@ -42,9 +45,11 @@ SignalLogiqueTest >> testSignalBasOr [
     
     resultat1 := s2 or: s2.
     self assert: resultat1 value equals: false.
-    
+    self assert: (resultat1 isKindOf: SignalBas).    
+
     resultat2 := s1 or: s2.
-    self assert: resultat2 value equals: true
+    self assert: resultat2 value equals: true.
+    self assert: (resultat2 isKindOf: SignalHaut).
 ]
 
 { #category : 'tests' }
@@ -55,9 +60,11 @@ SignalLogiqueTest >> testSignalHautAnd [
     
     resultat1 := s1 and: s1.
     self assert: resultat1 value equals: true.
+    self assert: (resultat1 isKindOf: SignalHaut).
     
 	resultat2 := s1 and: s2 .
-    self assert: resultat2 value equals: false
+    self assert: resultat2 value equals: false.
+    self assert: (resultat2 isKindOf: SignalBas)
 ]
 
 { #category : 'tests' }
@@ -77,8 +84,11 @@ SignalLogiqueTest >> testSignalHautOr [
     
     resultat1 := s1 or: s1.
     self assert: resultat1 value equals: true.
+    self assert: (resultat1 isKindOf: SignalHaut).
     
     resultat2 := s1 or: s2.
+
+    self assert: (resultat2 isKindOf: SignalHaut).
     self assert: resultat2 value equals: true
 ]
 
