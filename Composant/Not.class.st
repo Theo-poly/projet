@@ -2,11 +2,24 @@ Class {
 	#name : 'Not',
 	#superclass : 'Porte',
 	#instVars : [
-		'in'
+		'in',
+		'blElement'
 	],
 	#category : 'Composant',
 	#package : 'Composant'
 }
+
+{ #category : 'accessing' }
+Not >> blElement [
+
+	^ blElement
+]
+
+{ #category : 'accessing' }
+Not >> blElement: anObject [
+
+	blElement := anObject
+]
 
 { #category : 'accessing' }
 Not >> description [
@@ -24,10 +37,24 @@ Not >> etat [
 
 { #category : 'public access' }
 Not >> evaluate [
-    | s1 |
-    s1 := [in evaluate] on: Error do: [:e | SignalBas new].
-    ^ s1 not
+	|s1 |
+	s1 := [in evaluate ] on: Error do: [:e | SignalBas new].
+   ^s1 not
+]
 
+{ #category : 'accessing' }
+Not >> image [
+    | element |
+    element := BlElement new.
+    element size: 80@60.
+    element background: Color gray.
+    
+    element addChild: (BlTextElement new
+        text: ('NOT' asRopedText fontSize: 12);
+   		  position: 20@20).
+    
+    self blElement: element.
+    ^ element
 ]
 
 { #category : 'accessing' }

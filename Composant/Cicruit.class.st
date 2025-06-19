@@ -5,7 +5,8 @@ Class {
 		'nom',
 		'composants',
 		'interrupteurs',
-		'sorties'
+		'sorties',
+		'circuit'
 	],
 	#category : 'Composant',
 	#package : 'Composant'
@@ -42,6 +43,130 @@ Cicruit >> ajouterComposants: uneCollectionDeComposants [
         sorted: [:a :b | a id < b id]
 ]
 
+{ #category : 'interface' }
+Cicruit >> cicruitComple [
+    | space container i1 i2 iSec or not and vanne e1 e2 eISec eOr eNot eAnd eVanne l1 l2 l3 l4 l5 l6 |
+    
+    space := BlSpace new.
+    space title: 'Circuit avec Positions'.
+    space extent: 900@600.
+    
+    container := BlElement new.
+    container layout: BlBasicLayout new.
+    container size: 900@600.
+    container background: Color white.
+    
+    i1 := Interrupteur new.
+    i1 position: 50@100.
+    
+    i2 := Interrupteur new.
+    i2 position: 50@200.
+    
+    iSec := Interrupteur new.
+    iSec position: 50@350.
+    
+    or := Or new.
+    or position: 250@150.
+    
+    not := Not new.
+    not position: 250@350.
+    
+    and := And new.
+    and position: 500@250.
+    
+    vanne := Vanne new.
+    vanne position: 750@250.
+    
+    "=== CONNEXIONS LOGIQUES ==="
+    or in1: i1; in2: i2.
+    not in: iSec.
+    and in1: or; in2: not.
+    vanne in: and.
+    
+    "=== CRÉATION DES ÉLÉMENTS GRAPHIQUES ==="
+    e1 := i1 image.
+    e1 position: i1 position.
+    i1 blElement: e1.
+    
+    e2 := i2 image.
+    e2 position: i2 position.
+    i2 blElement: e2.
+    
+    eISec := iSec image.
+    eISec position: iSec position.
+    iSec blElement: eISec.
+    
+    eOr := or image.
+    eOr position: or position.
+    or blElement: eOr.
+    
+    eNot := not image.
+    eNot position: not position.
+    not blElement: eNot.
+    
+    eAnd := and image.
+    eAnd position: and position.
+    and blElement: eAnd.
+    
+    eVanne := vanne image.
+    eVanne position: vanne position.
+    vanne blElement: eVanne.
+    
+    l1 := self ligneDeComposant: i1 versEntree: 1 deComposant: or.
+    l2 := self ligneDeComposant: i2 versEntree: 2 deComposant: or.
+    l3 := self ligneDeComposant: iSec versComposant: not.
+    l4 := self ligneDeComposant: or versEntree: 1 deComposant: and.
+    l5 := self ligneDeComposant: not versEntree: 2 deComposant: and.
+    l6 := self ligneDeComposant: and versComposant: vanne.
+    
+    container addChild: l1.
+    container addChild: l2.
+    container addChild: l3.
+    container addChild: l4.
+    container addChild: l5.
+    container addChild: l6.
+    
+    container addChild: e1.
+    container addChild: e2.
+    container addChild: eISec.
+    container addChild: eOr.
+    container addChild: eNot.
+    container addChild: eAnd.
+    container addChild: eVanne.
+    
+    composants := {i1. i2. iSec. or. not. and. vanne}.
+    
+    e1 addEventHandler: (BlEventHandler 
+        on: BlClickEvent 
+        do: [:event | 
+            self mettreAJourCircuit: composants]).
+    
+    e2 addEventHandler: (BlEventHandler 
+        on: BlClickEvent 
+        do: [:event | 
+            self mettreAJourCircuit: composants]).
+    
+    eISec addEventHandler: (BlEventHandler 
+        on: BlClickEvent 
+        do: [:event | 
+            self mettreAJourCircuit: composants]).
+    space root: container.
+    space show.
+    ^ space
+]
+
+{ #category : 'accessing' }
+Cicruit >> circuit [
+
+	^ circuit
+]
+
+{ #category : 'accessing' }
+Cicruit >> circuit: anObject [
+
+	circuit := anObject
+]
+
 { #category : 'accessing' }
 Cicruit >> composants [
 
@@ -64,7 +189,7 @@ Cicruit >> description [
 ]
 
 { #category : 'public access' }
-Cicruit >> evaluate [
+Cicruit >> evaluate [ 
     | res|
     res := OrderedCollection new.
     sorties do: [:out | 
@@ -99,6 +224,43 @@ Cicruit >> interrupteurs [
 Cicruit >> interrupteurs: anObject [
 
 	interrupteurs := anObject
+]
+
+{ #category : 'interface' }
+Cicruit >> ligne: pointA vers: pointB [
+    | ligne longueur |
+    longueur := (pointB x - pointA x) abs.
+    ligne := BlElement new.
+    ligne size: longueur@3.
+    ligne background: Color black.
+    ligne position: pointA.
+    ^ ligne
+]
+
+{ #category : 'interface' }
+Cicruit >> ligneDeComposant: comp1 versComposant: comp2 [
+    ^ self ligne: comp1 positionSortie vers: comp2 positionEntree
+]
+
+{ #category : 'interface' }
+Cicruit >> ligneDeComposant: comp1 versEntree: numeroEntree deComposant: comp2 [
+    ^ self ligne: comp1 positionSortie vers: (comp2 positionEntree: numeroEntree)
+
+]
+
+{ #category : 'interface' }
+Cicruit >> mettreAJourCircuit: lesComposants [
+    lesComposants do: [:comp | 
+        comp blElement ifNotNil: [
+            | nouvelleCouleur |
+            nouvelleCouleur := [comp evaluate value 
+                ifTrue: [Color green]
+                ifFalse: [Color red]]
+            on: Error 
+            do: [:error | Color lightGray].
+            comp blElement background: nouvelleCouleur]].
+    
+    self evaluate.
 ]
 
 { #category : 'accessing' }

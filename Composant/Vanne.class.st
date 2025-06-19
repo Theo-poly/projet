@@ -2,11 +2,24 @@ Class {
 	#name : 'Vanne',
 	#superclass : 'Composant',
 	#instVars : [
-		'in'
+		'in',
+		'blElement'
 	],
 	#category : 'Composant',
 	#package : 'Composant'
 }
+
+{ #category : 'accessing' }
+Vanne >> blElement [
+
+	^ blElement
+]
+
+{ #category : 'accessing' }
+Vanne >> blElement: anObject [
+
+	blElement := anObject
+]
 
 { #category : 'accessing' }
 Vanne >> description [
@@ -29,6 +42,34 @@ Vanne >> evaluate [
     ^ [in evaluate] on: Error do: [:error | SignalBas new]
 ]
 
+{ #category : 'interface' }
+Vanne >> image [
+    | element |
+    element := BlElement new.
+    element size: 70@50.
+    element background: self imageVanne.
+    self blElement: element.
+    ^ element
+
+]
+
+{ #category : 'interface' }
+Vanne >> imageOff [ 
+    ^ Color red 
+]
+
+{ #category : 'interface' }
+Vanne >> imageOn [ 
+    ^ Color green
+]
+
+{ #category : 'interface' }
+Vanne >> imageVanne [
+    ^ self evaluate value 
+        ifTrue: [self imageOn ]
+        ifFalse: [self imageOff]
+]
+
 { #category : 'accessing' }
 Vanne >> in [
 
@@ -39,13 +80,4 @@ Vanne >> in [
 Vanne >> in: anObject [
 
 	in := anObject
-]
-
-{ #category : 'tests' }
-Vanne >> testNotNonConnecte [
-    | notGate resultat attendu |
-    notGate := Not new.
-    resultat := notGate description.
-    attendu := 'Not ({1}) in: non connecté' format: {notGate id}.
-    self assert: resultat equals: attendu
 ]
